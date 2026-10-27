@@ -1,0 +1,115 @@
+/* Shared material: light from upper left. Broad, attached slopes model
+   deformation of one sheet; cavities reverse the highlight direction. */
+:root {
+  --rubber-rise: linear-gradient(135deg, #303538, #2b3033 42%, #272b2e 85%);
+  --rubber-fall: linear-gradient(135deg, #232629, #25282b 62%, #272b2e);
+  --rubber-raised-edge: inset 3px 3px 8px #6670751c, inset -4px -4px 10px #11171a26;
+  --rubber-recess: inset 5px 5px 11px #11171a70, inset -4px -4px 10px #57616629;
+  --rubber-ease: cubic-bezier(.22,.75,.25,1);
+  --raised: var(--rubber-raised-edge);
+  --inset: var(--rubber-recess);
+}
+
+/* Large raised forms have a wide shoulder that returns to the base plane. */
+.experience, .skill {
+  position:relative; isolation:isolate;
+  background:var(--rubber-rise);
+  box-shadow:var(--rubber-raised-edge);
+}
+.experience::before, .skill::before {
+  content:''; position:absolute; inset:-8px; border-radius:inherit;
+  z-index:-1; pointer-events:none;
+  background:linear-gradient(135deg,#535e632a, #343b3f18 36%, #25282b00 52%, #11171a42);
+  filter:blur(7px);
+}
+.experience::after, .skill::after {
+  content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+  box-shadow:inset 0 0 12px 5px #282d3044;
+}
+.experience-list{gap:27px}
+.skills-grid{gap:22px}
+.featured{border-left-color:#f6a36c99}
+
+/* Dents: shadow inside the upper-left wall, light on the lower-right wall. */
+.about.about-introduction, .discipline-strip, .rubber-nav {
+  background:var(--rubber-fall);
+  box-shadow:var(--rubber-recess);
+  position:relative; isolation:isolate;
+}
+.about.about-introduction::before, .discipline-strip::before {
+  content:''; position:absolute; inset:-5px; border-radius:inherit;
+  z-index:-1; pointer-events:none; filter:blur(5px);
+  box-shadow:inset 4px 4px 9px #11171a40,inset -4px -4px 9px #59636725;
+}
+.skill-icon, .tiny-cross, .role-emblem, .job-tags span, .filters button.active {
+  background:var(--rubber-fall); box-shadow:var(--rubber-recess);
+}
+.job-tags span{box-shadow:inset 2px 2px 5px #11171a60,inset -2px -2px 5px #59636725}
+.filters button{transition:box-shadow .3s var(--rubber-ease),color .25s}
+
+/* The moving block and its shoulder travel together under the sheet.
+   No detached shadow, hover translation, bounce, or luminous outline. */
+.rubber-nav .nav-lift {
+  background:var(--rubber-rise); box-shadow:var(--rubber-raised-edge);
+  border-radius:16px;
+  transition:transform .58s var(--rubber-ease),opacity .3s;
+}
+.rubber-nav .nav-lift::before {
+  inset:-5px -10px; border-radius:23px;
+  background:linear-gradient(135deg,#66717530,#3a424622 34%,#25282b00 50%,#11171a4d);
+  filter:blur(5px); box-shadow:none;
+}
+.rubber-nav .nav-lift::after {
+  background:linear-gradient(90deg,#67717616,transparent 19%,transparent 78%,#11171a1f),linear-gradient(180deg,#65707518,transparent 32%,transparent 64%,#11171a20);
+  box-shadow:inset 0 0 9px 4px #2b30334d;
+}
+.rubber-nav a, .rubber-nav a.is-lifted{transform:none;transition:color .35s;text-shadow:1px 1px 2px #11171a55}
+.rubber-nav .nav-lift.is-visible{transform:translateX(calc(var(--nav-index) * 100%))}
+
+/* Header deformation remains attached to the page along its lower shoulder. */
+.header.rubber-header, .header.rubber-header.is-raised {
+  background:linear-gradient(135deg,#2c3134,#282c2f 60%,#25282b);
+  box-shadow:inset 3px 0 10px #66707516,inset -5px -7px 15px #11171a26;
+}
+.rubber-header::before {
+  content:'';position:absolute;inset:3px -2px -9px;border-radius:inherit;
+  pointer-events:none;z-index:-1;filter:blur(7px);
+  box-shadow:inset -5px -8px 13px #11171a40,inset 4px 0 10px #66707515;
+}
+
+/* Small rubber controls use the same slopes at a smaller scale. */
+.controller-panel .view-toggle, footer>a:last-child {
+  position:relative;isolation:isolate;background:var(--rubber-rise);
+  box-shadow:var(--rubber-raised-edge);
+  transition:box-shadow .25s var(--rubber-ease),color .25s;
+}
+.controller-panel .view-toggle::before, footer>a:last-child::before {
+  content:'';position:absolute;inset:-5px;border-radius:inherit;z-index:-1;
+  pointer-events:none;filter:blur(4px);
+  background:linear-gradient(135deg,#5964692b,#25282b00 50%,#11171a3d);
+}
+footer>a:last-child:hover, footer>a:last-child:active{transform:none}
+.controller-panel .view-toggle:active, footer>a:last-child:active {
+  background:var(--rubber-fall);box-shadow:var(--rubber-recess);
+}
+footer::before{background:var(--rubber-fall);box-shadow:inset 9px 10px 20px #11171a66,inset -7px -7px 18px #59636726;filter:blur(5px)}
+
+/* Broader rubber transitions beneath the controller. Balls and joystick
+   remain physical objects above the sheet, retaining their contact shadows. */
+.controller-panel .rubber-arrow{background:var(--rubber-rise);box-shadow:var(--rubber-raised-edge)}
+.controller-panel .rubber-arrow::before{inset:-8px;filter:blur(6px);background:linear-gradient(135deg,#59646938,#25282b00 48%,#11171a4d)}
+.controller-panel .rubber-arrow:active,.controller-panel .rubber-arrow.is-pressed{background:var(--rubber-fall);box-shadow:var(--rubber-recess)}
+.controller-panel .rubber-track{box-shadow:inset 11px 11px 20px #11171a80,inset -9px -9px 20px #59636733;filter:blur(4px)}
+.controller-panel .rubber-inner{box-shadow:-7px -7px 18px #59636736,8px 8px 20px #11171a66;filter:blur(5px)}
+.controller-panel .joystick-socket{box-shadow:var(--rubber-recess)}
+@media(prefers-reduced-motion:reduce){.rubber-nav .nav-lift,.rubber-nav a,.header.rubber-header{transition:none}}
+
+/* Feathered perimeter shading must not widen the page. */
+body{overflow-x:clip}
+
+/* One continuous moving indentation shared by all toolkit filters. */
+.sliding-filters{position:relative;isolation:isolate}
+.sliding-filters button,.sliding-filters button.active{position:relative;z-index:1;background:transparent;box-shadow:none;transition:color .3s}
+.filter-dent{position:absolute;left:0;top:0;border-radius:10px;background:var(--rubber-fall);box-shadow:var(--rubber-recess);pointer-events:none;transition:transform .5s var(--rubber-ease),width .5s var(--rubber-ease),height .3s,opacity .2s}
+.filter-dent::before{content:'';position:absolute;inset:-3px;border-radius:inherit;box-shadow:inset 3px 3px 7px #11171a30,inset -3px -3px 7px #59636720;filter:blur(3px);pointer-events:none}
+@media(prefers-reduced-motion:reduce){.filter-dent{transition:none}}

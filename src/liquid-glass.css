@@ -1,0 +1,22 @@
+/* The shader supplies the surface. CSS only provides contact shadow and fallback. */
+.controller-panel .controller-arena .track-ball,
+.controller-panel .controller-arena .track-ball:hover,
+.controller-panel .controller-arena .track-ball:active {
+  padding:0;
+  border:0;
+  background:rgba(150,180,190,.08);
+  backdrop-filter:blur(1px);
+  -webkit-backdrop-filter:blur(1px);
+  box-shadow:1px 3px 4px #0c111449,3px 6px 10px #0c11142b;
+  filter:none;
+  transform:translate(-50%,-50%);
+  transition:none;
+}
+.controller-panel .controller-arena .track-ball::before,
+.controller-panel .controller-arena .track-ball::after { content:none; }
+.controller-panel .controller-arena .track-ball[data-glass-ready] {
+  background:transparent;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+.track-ball canvas { display:block;width:100%;height:100%;border-radius:50%;pointer-events:none; }
