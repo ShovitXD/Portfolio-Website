@@ -27,7 +27,7 @@ export default function ControllerPanel() {
   useEffect(() => {
     const panel = root.current, surface = screen.current, scene = canvas.current;
     const ctx = scene.getContext('2d');
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
     let lens;
     try { lens = renderer(glass.current, 0); } catch (error) { console.warn('Gravity Escape glass renderer unavailable', error); }
     if (!lens) setGlassError(true);
@@ -41,6 +41,7 @@ export default function ControllerPanel() {
       scene.width = Math.round(bounds.width * dpr); scene.height = Math.round(bounds.height * dpr);
       glass.current.style.width = `${old.sun.r * 2 / 480 * bounds.width}px`;
       glass.current.style.height = glass.current.style.width;
+      surface.style.setProperty('--sun-size', glass.current.style.width);
       if (old.status === 'running' && Math.hypot(old.player.x - old.sun.x, old.player.y - old.sun.y) <= old.sun.r + old.player.r + 8) {
         old.player.x = old.width * 0.25; old.player.y = old.height * 0.38; old.player.vx = old.player.vy = 0;
       }
@@ -57,7 +58,7 @@ export default function ControllerPanel() {
         while (accumulator >= 1 / 120) { stepGame(game.current, input.current, 1 / 120); accumulator -= 1 / 120; }
       } else accumulator = 0;
       const state = game.current;
-      ctx.setTransform(scene.width / state.width, 0, 0, scene.height / state.height, 0, 0); drawGame(ctx, state, reducedMotion.matches ? 0 : now / 1000);
+      ctx.setTransform(scene.width / state.width, 0, 0, scene.height / state.height, 0, 0); drawGame(ctx, state);
       if (lens) { lens.upload(scene); lens.draw(surface.getBoundingClientRect()); }
       setHud(current => current.score === state.score && current.status === state.status ? current : { score: state.score, status: state.status });
       frame = requestAnimationFrame(tick);
@@ -78,6 +79,7 @@ export default function ControllerPanel() {
     <div className="gravity-title"><span>GRAVITY ESCAPE</span><span>01 / ENDLESS</span></div>
     <div className="gravity-screen" ref={screen}>
       <canvas className="gravity-scene" ref={canvas} aria-label="Gravity survival playfield" />
+      <div className="gravity-sun-divot" aria-hidden="true" />
       <canvas className="gravity-sun" ref={glass} aria-hidden="true" />
       <div className="gravity-score"><span>SCORE</span><strong>{String(hud.score).padStart(6, '0')}</strong></div>
       {hud.status === 'ready' && <div className="gravity-ready"><strong>Stay out of the pull.</strong><span>Drag the joystick to begin</span></div>}

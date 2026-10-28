@@ -2,13 +2,6 @@ export const SETTINGS = { fireCooldown: 0.17, bulletLife: 1.4, thrust: 220, maxS
 const rand = (a, b) => a + Math.random() * (b - a);
 const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 const polygon = () => Array.from({ length: 7 }, () => rand(0.75, 1));
-// Jittered cells keep distant stars spread out, with stable positions across runs.
-const stars = Array.from({ length: 56 }, (_, i) => ({
-  x: (i % 8 + rand(0.12, 0.88)) / 8,
-  y: (Math.floor(i / 8) + rand(0.12, 0.88)) / 7,
-  radius: rand(0.55, 1.15), phase: rand(0, Math.PI * 2), speed: rand(0.65, 1.5),
-  brightness: rand(0.45, 0.7),
-}));
 
 export function createGame(width = 480, height = 390) {
   return { width, height, sun: { x: width / 2, y: height / 2, r: 29 },
@@ -83,14 +76,8 @@ export function stepGame(game, input, dt) {
   game.meteors = game.meteors.filter(m => m.x > -100 && m.x < game.width + 100 && m.y > -100 && m.y < game.height + 100);
 }
 
-export function drawGame(ctx, game, visualTime = 0) {
-  ctx.fillStyle = '#202326'; ctx.fillRect(0, 0, game.width, game.height);
-  ctx.save(); ctx.fillStyle = '#FFFFFF';
-  for (const star of stars) {
-    ctx.globalAlpha = star.brightness + Math.sin(visualTime * star.speed + star.phase) * 0.17;
-    ctx.beginPath(); ctx.arc(star.x * game.width, star.y * game.height, star.radius, 0, Math.PI * 2); ctx.fill();
-  }
-  ctx.restore();
+export function drawGame(ctx, game) {
+  ctx.fillStyle = '#25282B'; ctx.fillRect(0, 0, game.width, game.height);
   const preview = game.status === 'ready' ? [[0.72, 0.24, 17], [0.85, 0.58, 12], [0.67, 0.77, 22], [0.18, 0.65, 16]].map(([x, y, r]) => ({ x: x * game.width, y: y * game.height, r, angle: x * 4, shape: [1, 0.83, 0.95, 0.86, 1, 0.79, 0.92] })) : [];
   for (const rock of [...preview, ...game.meteors, ...game.fragments]) {
     ctx.save(); ctx.translate(rock.x, rock.y); ctx.rotate(rock.angle);
